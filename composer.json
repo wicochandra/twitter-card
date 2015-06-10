@@ -1,0 +1,14 @@
+{
+    "name": "wicochandra/twitter-card",
+    "description": "Generate Twitter Card",
+    "keywords": ["php", "twitter", "twitter card"],
+    "type": "library",
+    "required": {
+        "php": ">5.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "Wicochandra\\": "app/"
+        }
+    }
+}

@@ -1,26 +1,9 @@
-# Twitter Card
-Generate Twitter Card HTML tag For PHP. For twitter card description can be seen on https://dev.twitter.com/cards/types.
-
-## Usage
-
-```
 <?php
-use Wicochandra\Twitter;
 
-$twitterCard = new TwitterCard('@YourTwitter');
-$twitterCard->put(TwitterCard::CARD, TwitterCard::TYPE_SUMMARY_LARGE);
-$twitterCard->put(TwitterCard::TITLE, 'Title Twitter');
-$twitterCard->put(TwitterCard::DESCRIPTION, 'Short Description');
-$twitterCard->put(TwitterCard::IMAGE, 'http://link/to/your/image');
-$twitterCard->put(TwitterCard::URL, 'http://link/to/your/site');
+namespace Wicochandra;
 
-// render HTML tag
-echo $twitterCard->render();
-```
-
-## Available Constant
-
-```
+class TwitterCard
+{
 
     CONST TYPE_SUMMARY = 'summary';
     const TYPE_SUMMARY_LARGE = 'summary_large_image';
@@ -57,4 +40,42 @@ echo $twitterCard->render();
     const LABEL1 = 'twitter:label1';
     const DATA2 = 'twitter:data2';
     const LABEL2 = 'twitter:label2';
-```
+
+    protected $data = [];
+
+    public function __construct($site, $isId = false)
+    {
+        if ($isId) {
+            $this->put(self::SITE_ID, $site);
+        } else {
+            $this->put(self::SITE, $site);
+        }
+    }
+
+    public function put($key, $value)
+    {
+        $this->data[$key] = $value;
+    }
+
+    public function get($key, $default = '')
+    {
+        if ($this->has($key)) {
+            return $this->data[$key];
+        }
+        return $default;
+    }
+
+    public function has($key)
+    {
+        return isset($this->data[$key]);
+    }
+
+    public function render()
+    {
+        $render = '';
+        foreach ($this->data as $key => $value) {
+            $render .= sprintf("\t<meta name='%s' content='%s'>".PHP_EOL, $key, $value);
+        }
+        return $render;
+    }
+}
